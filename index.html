@@ -25,20 +25,22 @@
 
         .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .form-group { margin-bottom: 20px; }
+        .form-group { margin-bottom: 20px; padding: 15px; border: 1px solid #eee; border-radius: 10px; }
         .full { grid-column: span 2; }
+        .section-title { grid-column: span 2; color: var(--primary); border-right: 4px solid var(--primary); padding-right: 10px; margin-top: 10px; font-weight: 700; }
         
         label { display: block; margin-bottom: 8px; font-weight: 600; color: #555; }
         input, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: 'Cairo'; }
         input:focus { border-color: var(--primary); outline: none; }
 
-        .btn-save { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 10px; cursor: pointer; font-weight: 700; font-size: 1.1rem; width: 100%; transition: 0.3s; margin-top: 20px; }
+        .btn-save { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 10px; cursor: pointer; font-weight: 700; font-size: 1.1rem; width: 100%; transition: 0.3s; margin-top: 20px; position: sticky; bottom: 20px; z-index: 100; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3); }
         .btn-save:hover { background: #b8962d; transform: translateY(-2px); }
 
         @media (max-width: 900px) {
             .sidebar { display: none; }
             .main-content { margin-right: 0; }
             .grid { grid-template-columns: 1fr; }
+            .full { grid-column: span 1; }
         }
     </style>
 </head>
@@ -63,6 +65,7 @@
 
         <div class="card">
             <div class="grid">
+                <div class="section-title">قسم المقدمة (Hero Section)</div>
                 <div class="form-group full">
                     <label>العنوان الرئيسي (Hero Title)</label>
                     <input type="text" id="mainTitle">
@@ -80,6 +83,7 @@
                     <textarea id="heroDesc" rows="2"></textarea>
                 </div>
 
+                <div class="section-title">قسم التنظيف بالساعة</div>
                 <div class="form-group">
                     <label>عنوان قسم التنظيف</label>
                     <input type="text" id="cleanH">
@@ -93,6 +97,21 @@
                     <textarea id="cleanP" rows="2"></textarea>
                 </div>
 
+                <div class="section-title">قسم الحمام المغربي</div>
+                <div class="form-group">
+                    <label>عنوان الحمام المغربي</label>
+                    <input type="text" id="bathH">
+                </div>
+                <div class="form-group">
+                    <label>رابط صورة الحمام المغربي</label>
+                    <input type="text" id="imgBath">
+                </div>
+                <div class="form-group full">
+                    <label>وصف الحمام المغربي</label>
+                    <textarea id="bathP" rows="2"></textarea>
+                </div>
+
+                <div class="section-title">قسم المساج والاسترخاء</div>
                 <div class="form-group">
                     <label>عنوان قسم المساج</label>
                     <input type="text" id="msgH">
@@ -118,12 +137,12 @@
 <script>
     // إعدادات فايربيس (تأكد من الـ apiKey والـ appId)
     const firebaseConfig = {
-        apiKey: "AIza...", 
+        apiKey: "AIza...", // ضع مفتاحك هنا
         authDomain: "vexa-4b2fb.firebaseapp.com",
         databaseURL: "https://vexa-4b2fb-default-rtdb.firebaseio.com",
         projectId: "vexa-4b2fb",
         storageBucket: "vexa-4b2fb.appspot.com",
-        appId: "1:..." 
+        appId: "1:..." // ضع المعرف هنا
     };
 
     firebase.initializeApp(firebaseConfig);
@@ -138,11 +157,18 @@
             document.getElementById('subtitle').value = val.subtitle || "";
             document.getElementById('heroDesc').value = val.heroDesc || "";
             document.getElementById('waNum').value = val.waNum || "";
+            
             document.getElementById('cleanH').value = val.cleanH || "";
             document.getElementById('cleanP').value = val.cleanP || "";
+            document.getElementById('imgClean').value = val.imgClean || "";
+
+            // جلب بيانات الحمام المغربي الجديد
+            document.getElementById('bathH').value = val.bathH || "";
+            document.getElementById('bathP').value = val.bathP || "";
+            document.getElementById('imgBath').value = val.imgBath || "";
+            
             document.getElementById('msgH').value = val.msgH || "";
             document.getElementById('msgP').value = val.msgP || "";
-            document.getElementById('imgClean').value = val.imgClean || "";
             document.getElementById('imgMsg').value = val.imgMsg || "";
             
             statusDiv.innerText = "● متصل وقارئ للداتا";
@@ -163,11 +189,18 @@
             subtitle: document.getElementById('subtitle').value,
             heroDesc: document.getElementById('heroDesc').value,
             waNum: document.getElementById('waNum').value,
+            
             cleanH: document.getElementById('cleanH').value,
             cleanP: document.getElementById('cleanP').value,
+            imgClean: document.getElementById('imgClean').value,
+
+            // حفظ بيانات الحمام المغربي الجديد
+            bathH: document.getElementById('bathH').value,
+            bathP: document.getElementById('bathP').value,
+            imgBath: document.getElementById('imgBath').value,
+            
             msgH: document.getElementById('msgH').value,
             msgP: document.getElementById('msgP').value,
-            imgClean: document.getElementById('imgClean').value,
             imgMsg: document.getElementById('imgMsg').value
         };
 
